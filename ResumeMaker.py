@@ -82,11 +82,10 @@ class Resume:
         self.concept.append(concept);
         print("Concept was added.");
 
-    def make_resume(self,cat):
-        #%\cventry{2010--2015}{Bachelor}{College Pitagoras}{Betim - Brazil}{\textit{Computer Science}}{}
-        self.resume = "\\documentclass[9pt,Letter]{moderncv} \n\
+    def make_resume(self,cat,color):
+        self.resume = "\\documentclass[8pt,Letter]{moderncv} \n\
 \\moderncvstyle{classic} \n\
-\\moderncvcolor{green} \n\
+\\moderncvcolor{COLOR} \n\
 \\usepackage[utf8]{inputenc} \n\
 \\usepackage[scale=0.90]{geometry} \n\
 \\name{FIRST-NAMEMIDDLE-NAME}{LAST-NAME} \n\
@@ -107,6 +106,7 @@ EXPERIENCES \n\
 \\clearpage \n\
 \\end{document}\n";
         print("Here is your resume for "+cat+":");
+        self.resume = self.resume.replace("COLOR", color);
         self.resume = self.resume.replace("FIRST-NAME", self.first_name);
         if not(self.middle_name == ""):
             self.resume = self.resume.replace("MIDDLE-NAME", " "+ self.middle_name);
@@ -122,7 +122,7 @@ EXPERIENCES \n\
         self.resume = self.resume.replace("WEBSITE", self.website);
         education = ""
         for Ed in self.education:
-            education += "\\cventry{" + Ed.graduation_month + ", " + str(Ed.graduation_year) + "}{" + Ed.degree + "}{" + Ed.school + "}{GPA}{\\textit{" + Ed.field +"}}{}\n";
+            education += "\\cventry{" + Ed.graduation_month + ", " + str(Ed.graduation_year) + "}{" + Ed.degree + "}{" + Ed.school + "}{GPA}{\\textit{" + Ed.field +"}}{" + Ed.option + "}\n";
             if Ed.GPA == None:
                 education = education.replace("GPA","");
             else:
@@ -166,14 +166,15 @@ EXPERIENCES \n\
         self.experiences.sort(key=lambda x:x.year, reverse=True);
         for Ex in self.experiences:
             if Ex.isActive:
-                experiences += "\\cventry{" + str(Ex.year) + "}{" + Ex.name + "}{" + Ex.organization + "}{}{}{"+ Ex.description +"}\n\\\\";
+                experiences += "\\cventry{" + str(Ex.year) + "}{" + Ex.name + "}{" + Ex.organization + "}{}{}{"+ Ex.description +"}\n";
         for Ex in self.experiences:
             if not Ex.isActive and (cat in Ex.category):
-                experiences += "\\cventry{" + str(Ex.year) + "}{" + Ex.name + "}{" + Ex.organization + "}{}{}{" + Ex.description + "}\n\\\\";
+                experiences += "\\cventry{" + str(Ex.year) + "}{" + Ex.name + "}{" + Ex.organization + "}{}{}{" + Ex.description + "}\n";
         self.resume = self.resume.replace("EXPERIENCES",experiences)
         print(self.resume);
 
-    def save_resume(self,cat,path):
+    def save_resume(self,cat,path,color):
+        self.make_resume(cat,color);
         path += "/"+cat+"_resume.tex"
         print("Formatting and saving your Resume for "+cat+" in:",path);
         file = open(path, "w")
@@ -197,7 +198,7 @@ def main():
 
     mySkills.append(Skill("C",["PL"]));
     mySkills.append(Skill("C++",["PL"]));
-    mySkills.append(Skill("C#",["PL"]));
+    mySkills.append(Skill("C\\#",["PL"]));
     mySkills.append(Skill("Java",["PL"]));
     mySkills.append(Skill("PHP",["PL"]));
     mySkills.append(Skill("ASM (6502, x86, ARM, AVR)",["PL"]));
@@ -228,28 +229,28 @@ def main():
         ["SE", "PM", "PT"]));
     myExperiences.append(Experience("Tensorflow WYSIWYG","Oregon State University", 2017, 
          "Developed visual programming environment and interpreter for Google Tensorflow API. This compiler converts UML diagrams into working Tensorflow™ python scripts. This project was successfully produced and documented through a waterfall software engineering method within a span of 9 months. The project’s Client was Professor Fuxin Li under the oregon state university Capstone program. Find out more at my website.",
-        ["AI", "PL", "SE", "PM", "AL", "PT"]));
+        ["AI", "PL", "SE", "PM", "AL", "PT", "CV"]));
     myExperiences.append(Experience("NASA Life in Space challenge","Oregon State University", 2017, 
          "With a team of engineers developed a tool capable of performing in microgravity. Selected by NASA, HP and Intel® Design Challenge: Life in Space program as a finalist. The challenge was to develop a tool in order to improve the quality of life in International Space Station (ISS). The design involved a tape dispenser with retractable blade, designed to ensure safety of ISS astronauts in microgravity environment. This tool was designed, developed, prototyped and tested within the course of 10 weeks. The tool does not need to be shipped to ISS since it was designed to be completely 3D printable using the ISS’s on-board 3D printer. On behalf of OSU the team became one of the finalists in the competition.",
-        ["PM", "PT"]));
+        ["PM", "PT", "CG"]));
     myExperiences.append(Experience("SandBox","Oregon State University", 2016, 
          "Developed a computer vision program with OpenGL, OpenCV and RealSense™ technology in order to generate a topographical map of a sandbox and display a color pattern on the sand using a projector. Furthermore, this project uses machine learning algorithms in order to detect and remove noise from the camera output to enhance the appearance and reliability of the projection. The project is now being displayed at information office at Kelly engineering center in Oregon State University. ",
-        ["AI", "PL", "SE", "PM", "AL", "PT"]));
+        ["AI", "PL", "SE", "PM", "AL", "PT", "CV", "CG"]));
     myExperiences.append(Experience("TekFly","Oregon State University", 2015, 
          "Worked on a UAV that takes advantage of intel® Edison™ Microprocessor to send commands to its flight control module. This UAV carries an Intel RealSense™ Camera. Furthermore, an ML and CV application was developed for stabilization and flight control. The drone is capable of autonomous navigation in a 3D environment.",
-        ["AI", "PL", "SE", "PM", "AL", "PT"]));
+        ["AI", "PL", "SE", "PM", "AL", "PT", "CV"]));
     myExperiences.append(Experience("Virtual Gimbal","Oregon State University", 2015, 
          "Developed an Augmented Reality version of labyrinth game using F200 prototype camera and a small projector. The projector projects the game field and the ball and the camera calculates the angle of the plane held under the camera to animate the game. The game was developed using Unity engine and it was capable of simulation different friction coefficients and the acceleration due to gravity in different planets.",
-        ["AI", "PL", "SE", "PM", "AL", "PT"]));
+        ["AI", "PL", "SE", "PM", "AL", "PT", "CV", "CG"]));
     myExperiences.append(Experience("Virtual Tower Defense","Oregon State University", 2014, 
          "Created a demo in form of a tower defense game as part of an Intel® research. The user participates in the game by placing physical square blocks of different colors and sizes on a whiteboard that has an overhead projector and camera. The camera picks the size, color and position of those blocks and turns them into towers required by the tower defense game by bringing them to life. This project was developed for Intel® Realsense™ and is currently in their toolkit.",
-        ["AI", "PL", "SE", "PM", "AL", "PT"]));
+        ["AI", "PL", "SE", "PM", "AL", "PT", "CV", "CG"]));
     myExperiences.append(Experience("Software Engineer","Microsoft", 2019, 
          "Microsoft Core Services Engineering and Operations. Working closely with development on PowerBI, Azure Data Factory, Dat Bricks, Data Lake, Data Warehouse, and Analysis Services.",
         ["SE", "PM", "DB", "PL", "CC", "FT"], True));
     myExperiences.append(Experience("JAI Tool-Chain","Oregon State University", 2019, 
          "This was produced to streamline the process of setting up tools needed for Artificial Intelligence and Computer Graphic applications on Jetson SoC family of hardwares.",
-        ["AI", "PL", "SE", "PM","CG", "OS", "CC", "FT"]));
+        ["AI", "PL", "SE", "PM","CG", "OS", "CC", "FT", "CV"]));
     myExperiences.append(Experience("Tank 2019","Oregon State University", 2019, 
          "This project started as a fun experiment with OpenGL and turned into something much bigger. Everything from the models to the engine was developed from scratch. This program takes advantage of GLSL, GLM, OpenMP and OpenAL. Each revision introduced my features in an Agile fashion and it could be found online free to download.",
         ["AI", "PL", "SE", "PM","CG", "FT"]));
@@ -277,8 +278,11 @@ def main():
     for E in myExperiences:
         myResume.add_experiences(E);
 
-    myResume.make_resume("AI");
-    myResume.save_resume("AI",".");
+    myResume.save_resume("AI",".","blue");
+    myResume.save_resume("CG",".","green");
+    myResume.save_resume("CV",".","red");
+    myResume.save_resume("CG",".","black");
+    myResume.save_resume("PM",".","grey");
 
     print("Done.")
 
